@@ -3,32 +3,23 @@ import "./App.css";
 import Person from "./Person/Person";
 
 class App extends Component {
-  //useState() prima initial state kao argument
-  //useState() UVIJEK vraca dva elementa:
-  //1. updated state, fja koja omogucava update state-a
-  //array destructuring koristimo [ updatedState, fja]
   state = {
     persons: [
-      { name: "Max", age: 27 },
-      { name: "Joe", age: 33 },
-      { name: "Monee", age: 23 }
+      { id: 'bilo', name: "Joe", age: 33 },
+      { id: 'sta', name: "Max", age: 27 },
+      { id: 'unique', name: "Monee", age: 23 }
     ],
     otherState: "some other value",
     showPersons: false,
     buttonName: "Prikaži osobe"
   };
 
-  switchNameHandler = newName => {
-    // console.log("Was clicked");
-    // NOT HOW ITS DONE!!! this.state.persons[0].name = "Novo ime";
-    this.setState({
-      persons: [
-        { name: newName, age: 18 },
-        { name: "Joe", age: 0 },
-        { name: "Mikica", age: 66 }
-      ]
-    });
-  };
+  deletePersonHandler = (personIndex) => {
+    // const persons = this.state.persons.slice();
+    const persons = [...this.state.persons];
+    persons.splice(personIndex, 1);
+    this.setState({ persons: persons });
+  }
 
   togglPersonHandler = () => {
     const doesShow = this.state.showPersons;
@@ -42,9 +33,21 @@ class App extends Component {
     });
   };
 
+  nameChangeHandler = (event, id) => {
+    const editedPersons = this.state.persons;
+    const personIndex = editedPersons.findIndex(p => {
+      return p.id === id;
+    });
+    editedPersons[personIndex].name = event.target.value;
+    this.setState({
+      persons: editedPersons
+    });
+  }
+
   render() {
     const style = {
-      backgroundColor: "white",
+      backgroundColor: "green",
+      color: 'white',
       font: "inherit",
       border: "1px solid blue",
       padding: "8px",
@@ -56,34 +59,46 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          
-          <Person
-            name={this.state.persons[0].name}
-            age={this.state.persons[0].age}
-          />
-          <Person
-            name={this.state.persons[1].name}
-            age={this.state.persons[1].age}
-          />
-          <Person
-            name={this.state.persons[2].name}
-            age={this.state.persons[2].age}
-          >
-            My hobbies: Racing
-          </Person>
+          {this.state.persons.map((person, index) => {
+            return <Person
+              name={person.name}
+              age={person.age}
+              personName={person.name}
+              click={() => this.deletePersonHandler(index)}
+              key={person.id}
+              changed={(event) => this.nameChangeHandler(event, person.id)} />
+
+          })}
         </div>
       );
+      style.backgroundColor = 'red';
+      style[':hover'] = {
+        backgroundColor: 'salmon',
+        color: 'black'
+      }
+    }
+
+    let classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push('red');
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push('bold');
     }
 
     return (
+
       <div className="App">
         <h1>React JS...</h1>
-        <p>Zaista.</p>
-        <button style={style} onClick={this.togglPersonHandler}>
+        <p className={classes.join(' ')}>Zaista.</p>
+        <button
+          style={style}
+          onClick={this.togglPersonHandler}>
           {this.state.buttonName}
         </button>
         {persons}
       </div>
+
     );
   }
 
