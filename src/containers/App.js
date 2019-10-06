@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import classes from "./App.css";
-import Person from "../components/Persons/Person/Person";
+import Persons from "../components/Persons/Persons";
+import Cockpit from "../components/Cockpit/Cockpit"
 
 class App extends Component {
   state = {
@@ -11,8 +12,34 @@ class App extends Component {
     ],
     otherState: "some other value",
     showPersons: false,
-    buttonName: "Prikaži osobe"
+    buttonName: "Show persons"
   };
+
+  render() {
+
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = <Persons
+        persons={this.state.persons}
+        clicked={this.deletePersonHandler}
+        changed={this.nameChangeHandler} />;
+    }
+
+    return (
+
+      <div className={classes.App}>
+        <Cockpit
+          title={this.props.appTitle}
+          showPersons={this.state.showPersons}
+          persons={this.state.persons} 
+          clicked={this.togglPersonHandler}
+          buttonName={this.state.buttonName}/>
+        {persons}
+      </div>
+
+    );
+  }
 
   deletePersonHandler = (personIndex) => {
     // const persons = this.state.persons.slice();
@@ -22,14 +49,14 @@ class App extends Component {
   }
 
   togglPersonHandler = () => {
-    const doesShow = this.state.showPersons;
-    let IbuttonValue = "Prikaži osobe";
-    if (!doesShow) {
-      IbuttonValue = "Sakrij osobe";
+    const showingPersons = this.state.showPersons;
+    let buttonText = "Prikaži osobe";
+    if (!showingPersons) {
+      buttonText = "Sakrij osobe";
     }
     this.setState({
-      showPersons: !doesShow,
-      buttonName: IbuttonValue
+      showPersons: !showingPersons,
+      buttonName: buttonText
     });
   };
 
@@ -44,52 +71,6 @@ class App extends Component {
     });
   }
 
-  render() {
-    
-    let persons = null;
-    let buttonClass = null;
-
-    if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-                key={person.id}
-                name={person.name}
-                age={person.age}
-                personName={person.name}
-                click={() => this.deletePersonHandler(index)}
-                changed={(event) => this.nameChangeHandler(event, person.id)} />
-          })}
-        </div>
-      );
-
-      buttonClass = classes.red;
-    }
-
-    let assignedClasses = [];
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push(classes.red);
-    }
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push(classes.bold);
-    }
-
-    return (
-
-      <div className={classes.App}>
-        <h1>React JS...</h1>
-        <p className={assignedClasses.join(' ')}>Zaista.</p>
-        <button 
-          className={buttonClass}
-          onClick={this.togglPersonHandler}>
-          {this.state.buttonName}
-        </button>
-        {persons}
-      </div>
-
-    );
-  }
 
   // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Test tekst'));
 }

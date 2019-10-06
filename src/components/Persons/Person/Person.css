@@ -7,7 +7,8 @@
     text-align: center;
 }
 
-@media (min-width: 500px) {
+/* ako je rezolucija ispod 501px onda primjeni ovaj style*/
+@media (max-width: 500px) {
     .Person {
         width: 450px;
     }
