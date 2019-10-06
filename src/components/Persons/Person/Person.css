@@ -6,3 +6,10 @@
     padding: 16px;
     text-align: center;
 }
+
+/* ako je rezolucija ispod 501px onda primjeni ovaj style*/
+@media (max-width: 500px) {
+    .Person {
+        width: 450px;
+    }
+}
