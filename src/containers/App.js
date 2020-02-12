@@ -34,6 +34,7 @@ class App extends Component {
           showPersons={this.state.showPersons}
           persons={this.state.persons} 
           clicked={this.togglPersonHandler}
+          copyToClipboard={this.copyToClipboard}
           buttonName={this.state.buttonName}/>
         {persons}
       </div>

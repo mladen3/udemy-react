@@ -27,8 +27,14 @@ const cockpit = (props) => {
                 onClick={props.clicked}>
                 {props.buttonName}
             </button>
+            <button
+                className={buttonClass}
+                onClick={() => props.copyToClipboard("tablicaID")}>
+                COPY TO CLIPBOARD
+            </button>
         </div>
     );
+
 }
 
 export default cockpit;
